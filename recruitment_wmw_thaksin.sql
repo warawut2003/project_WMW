@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 16, 2024 at 05:03 PM
+-- Generation Time: Jul 17, 2024 at 04:37 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -79,7 +79,7 @@ CREATE TABLE `user_address` (
   `address_id` int(11) NOT NULL,
   `U_id` char(3) NOT NULL,
   `house_num` varchar(10) NOT NULL,
-  `village` varchar(2) NOT NULL,
+  `villageNum` varchar(2) NOT NULL,
   `alley` varchar(30) NOT NULL,
   `street` varchar(30) NOT NULL,
   `sub_district` varchar(30) NOT NULL,
@@ -87,6 +87,14 @@ CREATE TABLE `user_address` (
   `province` varchar(40) NOT NULL,
   `postal_code` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_address`
+--
+
+INSERT INTO `user_address` (`address_id`, `U_id`, `house_num`, `villageNum`, `alley`, `street`, `sub_district`, `district`, `province`, `postal_code`) VALUES
+(1, '001', '1/69', '5', 'จัดสรร', 'ราชดำเนิน', 'ในเมือง', 'เมือง', 'นครศรีธรรมราช', '80000'),
+(5, '002', '1/777', '3', '-', 'ราชดำเนิน', 'ชะอวด', 'ชะอวด', 'นครศรีธรรมราช', '89000');
 
 -- --------------------------------------------------------
 
@@ -105,6 +113,14 @@ CREATE TABLE `user_parents` (
   `mother_Occupation` varchar(40) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `user_parents`
+--
+
+INSERT INTO `user_parents` (`parent_id`, `U_id`, `father_Fname`, `father_Lname`, `father_Occupation`, `mother_Fname`, `mother_Lname`, `mother_Occupation`) VALUES
+(1, '001', 'Witter', 'Ninrat', 'policeman', 'porn', 'Ninrat', 'trading career'),
+(3, '002', 'ประสิทธิ', 'ดีดี', 'policeman', 'สุขใจ', 'ดีดี', 'trading career');
+
 -- --------------------------------------------------------
 
 --
@@ -115,15 +131,15 @@ CREATE TABLE `user_personal` (
   `User_id` char(3) NOT NULL,
   `User_Fname` varchar(30) NOT NULL,
   `User_Lname` varchar(30) NOT NULL,
-  `User_gender` enum('ชาย','หญิง','อื่นๆ') NOT NULL,
+  `User_gender` varchar(10) NOT NULL,
   `User_Date_Birth` date DEFAULT NULL,
   `User_age` int(11) NOT NULL,
   `User_dmc_Province` varchar(25) NOT NULL,
   `User_Religion` varchar(20) NOT NULL,
-  `User_Blood_Type` enum('A','B','O','AB') NOT NULL,
-  `User_Marital_Status` enum('โสด','สมรส','หย่าร้าง','หม้าย') NOT NULL,
-  `User_child` int(2) NOT NULL,
-  `User_Military_Status` enum('ได้รับการยกเว้น','ยังไม่ได้รับการเกณฑ์เป็นทหารกองหนุนแล้ว','หย่าร้าง') DEFAULT NULL,
+  `User_Blood_Type` varchar(2) NOT NULL,
+  `User_Marital_Status` varchar(10) NOT NULL,
+  `User_child` int(1) NOT NULL,
+  `User_Military_Status` varchar(40) DEFAULT NULL,
   `User_phone_num` char(10) NOT NULL,
   `User_email` varchar(70) NOT NULL,
   `User_Image` varchar(120) DEFAULT NULL,
@@ -131,6 +147,14 @@ CREATE TABLE `user_personal` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `Update_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_personal`
+--
+
+INSERT INTO `user_personal` (`User_id`, `User_Fname`, `User_Lname`, `User_gender`, `User_Date_Birth`, `User_age`, `User_dmc_Province`, `User_Religion`, `User_Blood_Type`, `User_Marital_Status`, `User_child`, `User_Military_Status`, `User_phone_num`, `User_email`, `User_Image`, `User_file`, `created_at`, `Update_at`) VALUES
+('001', 'warawut', 'ninrat', 'man', '2003-10-25', 22, 'nakorn', 'Buddhist', 'AB', 'single', 1, 'No', '0973099633', 'warawut100@gmail.com', 'image1', 'file1', '2024-07-16 11:09:00', '2024-07-17 02:34:49'),
+('002', 'Disaya', 'KongDee', 'girl', '2003-12-06', 21, 'nakorn', 'Buddhist', 'B', 'single', 1, 'No', '0973088633', 'Disaya@gmail.com', 'image2', 'file2', '2024-07-17 02:38:20', '2024-07-17 02:38:20');
 
 -- --------------------------------------------------------
 
@@ -140,12 +164,12 @@ CREATE TABLE `user_personal` (
 
 CREATE TABLE `user_workplace_now` (
   `WP_id` int(11) NOT NULL,
-  `U_id` int(11) NOT NULL,
+  `U_id` char(3) NOT NULL,
   `Office_Name` varchar(50) NOT NULL,
   `Job_position` varchar(30) NOT NULL,
   `Salary` int(11) NOT NULL,
   `Office_address` varchar(10) NOT NULL,
-  `Office_village` varchar(5) NOT NULL,
+  `Office_villageNum` varchar(5) NOT NULL,
   `Office_alley` varchar(30) NOT NULL,
   `Office_street` varchar(40) NOT NULL,
   `Office_sub_district` varchar(40) NOT NULL,
@@ -154,6 +178,14 @@ CREATE TABLE `user_workplace_now` (
   `Office_phone` char(10) NOT NULL,
   `Office_fax` char(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_workplace_now`
+--
+
+INSERT INTO `user_workplace_now` (`WP_id`, `U_id`, `Office_Name`, `Job_position`, `Salary`, `Office_address`, `Office_villageNum`, `Office_alley`, `Office_street`, `Office_sub_district`, `Office_district`, `Office_province`, `Office_phone`, `Office_fax`) VALUES
+(1, '001', 'Tikkok', 'programming', 80000, '999', '7', 'ซอยรังสิต', 'ถนนราชดำเนิน', 'เมือง', 'รังสิต', 'กรุงเทพ', '0878778899', '021586699'),
+(3, '002', 'Google', 'data analysis', 50000, '779', '9', 'ซอยใหม่', 'ถนนราชดำเนิน', 'เมือง', 'จตุจักร', 'กรุงเทพ', '0878998522', '021704444');
 
 --
 -- Indexes for dumped tables
@@ -209,19 +241,19 @@ ALTER TABLE `users_iogin`
 -- AUTO_INCREMENT for table `user_address`
 --
 ALTER TABLE `user_address`
-  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `user_parents`
 --
 ALTER TABLE `user_parents`
-  MODIFY `parent_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `parent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user_workplace_now`
 --
 ALTER TABLE `user_workplace_now`
-  MODIFY `WP_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `WP_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
