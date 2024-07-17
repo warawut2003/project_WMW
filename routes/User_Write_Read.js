@@ -6,6 +6,8 @@ const User_WRoute = express.Router();
 const connection = require('../db');
 const { createPool } = require('mysql2');
 
+//เพิ่ม แสดง ข้อมูลตาราง login
+
 User_WRoute.post('/api/AddLogin',async function(req,res,next){
     const { username ,password } = req.body;
     if ( !username ||!password) {
@@ -44,6 +46,30 @@ User_WRoute.post('/api/AddLogin',async function(req,res,next){
     }
 });
 
+User_WRoute.get('/api/DisplayLogin', function (req, res, next) {
+
+    connection.execute('SELECT * FROM users_iogin;')
+
+    .then((result) => {
+
+       var rawData = result[0];
+
+       res.send(rawData);
+
+       
+
+    }).catch((err) => {
+
+       console.log(err);
+
+       res.end();
+
+    });
+
+});
+
+//เพื่ม แสดงข้อมูล ส่วนตัว User
+
 User_WRoute.post('/api/AddPersonal',function(req,res,next){
     const { User_id , Fname, Lname, gender,Date_Birth,age,dmc_Province,Religion,Blood_Type,
         Marital_Status,num_child,Military_Status,phone_num,email,Image,file
@@ -63,8 +89,8 @@ User_WRoute.post('/api/AddPersonal',function(req,res,next){
         phone_num,email,Image,file,
         now,  now]).then(() => {
        
-            console.log('Insert successfully');
-            res.status(201).send('User added successfully');
+            console.log('Insert personal successfully');
+            res.status(201).send('User personal added successfully');
         }).catch((err) => {
        
             console.error(err);
@@ -76,7 +102,7 @@ User_WRoute.post('/api/AddPersonal',function(req,res,next){
        
        });
 
-       User_WRoute.get('/api/DisplayLogin', function (req, res, next) {
+       User_WRoute.get('/api/DisplayPersonal', function (req, res, next) {
 
         connection.execute('SELECT * FROM user_personal;')
     
@@ -97,6 +123,155 @@ User_WRoute.post('/api/AddPersonal',function(req,res,next){
         });
     
     });
+
+       
+    //เพิ่ม แสดง ข้อมูลพ่อแม่
+
+    User_WRoute.post('/api/AddParent',function(req,res,next){
+        const { user_id , house_num, villageNum, father_Occupation,mother_fname,mother_lname,mother_Occupation} = req.body;
+    
+        if (!user_id || !house_num || !villageNum || !father_Occupation || !mother_fname || !mother_lname|| !mother_Occupation ) {
+            return res.status(400).send('Missing required fields');
+        }
+    
+        
+        connection.execute(`INSERT INTO user_parents(U_id, house_num, villageNum, alley, mother_Fname
+            ,mother_Lname, mother_Occupation) VALUES ( ?, ?, ?, ?, ?,?, ?);`,
+        [user_id, house_num, villageNum, alley,mother_fname,mother_lname, mother_Occupation]).then(() => {
+                console.log('Insert parents successfully');
+                res.status(201).send('User parents added successfully');
+            }).catch((err) => {
+           
+                console.error(err);
+        res.status(500).send('Error inserting User');
+           
+            });
+                
+           });
+
+    User_WRoute.get('/api/DisplayParents', function (req, res, next) {
+
+            connection.execute('SELECT * FROM user_parents;')
+        
+            .then((result) => {
+        
+               var rawData = result[0];
+        
+               res.send(rawData);
+        
+               
+        
+            }).catch((err) => {
+        
+               console.log(err);
+        
+               res.end();
+        
+            });
+        
+        });
+
+
+    //เพิ่ม แสดง ที่อยู่
+
+    User_WRoute.post('/api/insAddress',function(req,res,next){
+        const { user_id , house_num, villageNum, alley,street,sub_district,district,province,postal_code} = req.body;
+    
+        if (!user_id || !house_num || !villageNum || !alley || !street || !sub_district|| !district||!province||!postal_code ) {
+            return res.status(400).send('Missing required fields');
+        }
+    
+        
+        connection.execute(`INSERT INTO user_address(U_id, house_num, villageNum, alley, street
+            ,sub_district, district,province,postal_code) VALUES ( ?, ?, ?, ?, ?,?, ?,?,?);`,
+        [user_id, house_num, villageNum, alley,street,sub_district, district,province,postal_code]).then(() => {
+                console.log('Insert address successfully');
+                res.status(201).send('User address added successfully');
+            }).catch((err) => {
+           
+                console.error(err);
+        res.status(500).send('Error inserting User');
+           
+            });
+                
+           });
+
+           User_WRoute.get('/api/DisplayAddress', function (req, res, next) {
+
+            connection.execute('SELECT * FROM user_address;')
+        
+            .then((result) => {
+        
+               var rawData = result[0];
+        
+               res.send(rawData);
+        
+               
+        
+            }).catch((err) => {
+        
+               console.log(err);
+        
+               res.end();
+        
+            });
+        
+        });
+
+    //เพื่ม แสดงข้อมูล ที่อยู่ ที่ทำงานปัจจุบัน
+    
+    User_WRoute.post('/api/AddOffice',function(req,res,next){
+        const { user_id , Office_Name, Job_position, Salary,Office_address,Office_villageNum,
+            Office_alley, Office_street, Office_sub_district, Office_district,
+            Office_province, Office_phone, Office_fax} = req.body;
+    
+        if (!user_id || !Office_Name || !Job_position || !Salary || !Office_address || !Office_villageNum|| !Office_alley||
+            !Office_street||!Office_sub_district||!Office_district||!Office_province||!Office_phone||!Office_fax ) {
+            return res.status(400).send('Missing required fields');
+        }
+    
+        
+        connection.execute(`INSERT INTO user_workplace_now(U_id, Office_Name, Job_position, Salary, Office_address
+            ,Office_villageNum, Office_alley,Office_street,Office_sub_district,Office_district,Office_province,Office_phone,
+            Office_fax) VALUES ( ?, ?, ?, ?, ?,?, ?,?,?,?,?,?,?);`,
+        [user_id, Office_Name, Job_position, Salary,Office_address,Office_villageNum, Office_alley, Office_street, Office_sub_district,
+            Office_district, Office_province, Office_phone, Office_fax
+        ]).then(() => {
+                console.log('Insert Workplace Now successfully');
+                res.status(201).send('User Workplace Now added successfully');
+            }).catch((err) => {
+           
+                console.error(err);
+        res.status(500).send('Error inserting User');
+           
+            });
+                
+           });
+
+        User_WRoute.get('/api/DPoffice', function (req, res, next) {
+
+            connection.execute('SELECT * FROM user_workplace_now;')
+        
+            .then((result) => {
+        
+               var rawData = result[0];
+        
+               res.send(rawData);
+        
+               
+        
+            }).catch((err) => {
+        
+               console.log(err);
+        
+               res.end();
+        
+            });
+        
+        });
+           
+
+       
 
 User_WRoute.use('/', function (req, res, next) {
 
